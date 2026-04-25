@@ -1,0 +1,103 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SocketLab1.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="780"
+        x:Class="SocketLab1.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Width="1200"
+        Height="700"
+        MinWidth="1120"
+        MinHeight="640"
+        Title="ЛР: Сокеты (Задание 1)">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,*,Auto" Margin="8" RowSpacing="6">
+            <TextBlock Text="Программа для обмена данными между компьютерами"
+                       FontSize="15"
+                       FontWeight="Bold"/>
+
+            <Grid Grid.Row="1" ColumnDefinitions="1.1*,1*,1*" ColumnSpacing="8">
+                <Border Grid.Column="0" BorderThickness="1" CornerRadius="4" Padding="6">
+                    <Grid RowDefinitions="Auto,*,Auto,Auto" RowSpacing="6">
+                        <ComboBox ItemsSource="{Binding LocalDrives}"
+                                  SelectedItem="{Binding SelectedDrive}"
+                                  Width="190"
+                                  Height="28"/>
+                        <ListBox Grid.Row="1"
+                                 ItemsSource="{Binding BrowserEntries}"
+                                 SelectedItem="{Binding SelectedBrowserItem}"/>
+
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="6">
+                            <Button Content="Открыть" Command="{Binding OpenSelectedPathCommand}"/>
+                            <Button Content="Вверх" Command="{Binding NavigateUpCommand}"/>
+                            <Button Content="Обновить" Command="{Binding RefreshBrowserCommand}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="6">
+                            <TextBlock Text="IP-адрес:" VerticalAlignment="Center"/>
+                            <TextBox Width="120" Height="28" Text="{Binding ClientServerAddress}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Column="1" BorderThickness="1" CornerRadius="4" Padding="6">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto" RowSpacing="6">
+                        <TextBlock Text="Клиентская сторона" FontWeight="SemiBold"/>
+
+                        <WrapPanel Grid.Row="1" Orientation="Horizontal" ItemWidth="118" ItemHeight="28">
+                            <TextBlock Text="Порт:" VerticalAlignment="Center"/>
+                            <TextBox Width="80" Height="28" Text="{Binding ClientServerPort}"/>
+                            <Button Content="Соединиться" Command="{Binding ConnectClientCommand}"/>
+                            <Button Content="Отключиться" Command="{Binding DisconnectClientCommand}"/>
+                        </WrapPanel>
+
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="6">
+                            <TextBlock Text="Путь:" VerticalAlignment="Center"/>
+                            <TextBox Width="280" Height="28" Text="{Binding PathInput}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="6">
+                            <Button Content="Передать серверу" Command="{Binding SendPathRequestCommand}"/>
+                            <Button Content="Передать клиенту" Command="{Binding SendPathRequestCommand}"/>
+                        </StackPanel>
+
+                        <TextBox Grid.Row="4"
+                                 Text="{Binding ClientResponse}"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 IsReadOnly="True"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+
+                        <ListBox Grid.Row="5" Height="110" ItemsSource="{Binding ClientLog}"/>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Column="2" BorderThickness="1" CornerRadius="4" Padding="6">
+                    <Grid RowDefinitions="Auto,Auto,*" RowSpacing="6">
+                        <TextBlock Text="Серверная сторона" FontWeight="SemiBold"/>
+                        <WrapPanel Grid.Row="1" Orientation="Horizontal" ItemWidth="120" ItemHeight="28">
+                            <TextBlock Text="IP:" VerticalAlignment="Center"/>
+                            <TextBox Width="110" Height="28" Text="{Binding ServerAddress}"/>
+                            <TextBox Width="65" Height="28" Text="{Binding ServerPort}"/>
+                            <Button Content="Сервер включить" Command="{Binding StartServerCommand}"/>
+                            <Button Content="Сервер отключить" Command="{Binding StopServerCommand}"/>
+                        </WrapPanel>
+                        <ListBox Grid.Row="2" ItemsSource="{Binding ServerLog}"/>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+                <Button Content="Очистить логи" Command="{Binding ClearLogsCommand}"/>
+            </StackPanel>
+        </Grid>
+
+</Window>
