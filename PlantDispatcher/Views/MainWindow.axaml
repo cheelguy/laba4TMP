@@ -1,0 +1,66 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:PlantDispatcher.ViewModels"
+        xmlns:controls="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="980" d:DesignHeight="700"
+        x:Class="PlantDispatcher.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Width="980"
+        Height="700"
+        MinWidth="900"
+        MinHeight="650"
+        Title="Пульт диспетчера (Задание 3)">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Grid Margin="12" RowDefinitions="Auto,Auto,Auto,*,Auto,*" RowSpacing="8">
+        <TextBlock Text="Пульт диспетчера: состояние технологических установок"
+                   FontSize="18"
+                   FontWeight="Bold"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8">
+            <TextBlock Text="IP:" VerticalAlignment="Center"/>
+            <TextBox Width="150" Text="{Binding ListenIp}"/>
+            <TextBlock Text="Порт:" VerticalAlignment="Center"/>
+            <TextBox Width="90" Text="{Binding ListenPort}"/>
+            <Button Content="Запустить сервер" Command="{Binding StartServerCommand}"/>
+            <Button Content="Остановить сервер" Command="{Binding StopServerCommand}"/>
+        </StackPanel>
+
+        <TextBlock Grid.Row="2" Text="{Binding StatusText}"/>
+
+        <Border Grid.Row="3" BorderThickness="1" Padding="8">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Plants}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" ItemWidth="150" ItemHeight="70"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:PlantItemViewModel">
+                            <Button Content="{Binding Title}"
+                                    IsHitTestVisible="False"
+                                    Background="{Binding StateBrush}"
+                                    Foreground="White"
+                                    FontWeight="Bold"
+                                    Margin="4"
+                                    ToolTip.Tip="{Binding StateText}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+
+        <TextBlock Grid.Row="4" Text="Лог событий:" FontWeight="SemiBold"/>
+        <ListBox Grid.Row="5" ItemsSource="{Binding Logs}"/>
+    </Grid>
+
+</Window>

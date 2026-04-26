@@ -1,0 +1,68 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:DispatcherPanel.ViewModels"
+        xmlns:shapes="clr-namespace:Avalonia.Controls.Shapes;assembly=Avalonia.Controls"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="980" d:DesignHeight="760"
+        x:Class="DispatcherPanel.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Width="980"
+        Height="760"
+        MinWidth="900"
+        MinHeight="700"
+        Title="Пульт диспетчера (Задание 2)">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Grid Margin="12" RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,*" RowSpacing="8">
+        <TextBlock Text="Пульт диспетчера: графики параметров процесса"
+                   FontSize="18"
+                   FontWeight="Bold"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8">
+            <TextBlock Text="IP:" VerticalAlignment="Center"/>
+            <TextBox Width="150" Text="{Binding ListenIp}"/>
+            <TextBlock Text="Порт:" VerticalAlignment="Center"/>
+            <TextBox Width="100" Text="{Binding ListenPort}"/>
+            <Button Content="Запустить прием" Command="{Binding StartListeningCommand}"/>
+            <Button Content="Остановить прием" Command="{Binding StopListeningCommand}"/>
+            <Button Content="Очистить графики" Command="{Binding ClearChartsCommand}"/>
+        </StackPanel>
+
+        <TextBlock Grid.Row="2" Text="{Binding Status}"/>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="16">
+            <TextBlock Text="Текущая температура:" FontWeight="SemiBold"/>
+            <TextBlock Text="{Binding LastTemperature}"/>
+            <TextBlock Text="Текущее давление:" FontWeight="SemiBold"/>
+            <TextBlock Text="{Binding LastPressure}"/>
+        </StackPanel>
+
+        <TextBlock Grid.Row="4" Text="Температура (0..100 C)"/>
+        <Border Grid.Row="5" BorderThickness="1" Padding="4">
+            <Canvas Width="760" Height="180" Background="#11151C">
+                <shapes:Line StartPoint="0,180" EndPoint="760,180" Stroke="#596274" StrokeThickness="1"/>
+                <shapes:Line StartPoint="0,0" EndPoint="0,180" Stroke="#596274" StrokeThickness="1"/>
+                <shapes:Polyline Points="{Binding TemperaturePoints}" Stroke="#FF5C5C" StrokeThickness="2"/>
+            </Canvas>
+        </Border>
+
+        <Grid Grid.Row="6" RowDefinitions="Auto,*" RowSpacing="4">
+            <TextBlock Text="Давление (0..6 атм)"/>
+            <Border Grid.Row="1" BorderThickness="1" Padding="4">
+                <Canvas Width="760" Height="180" Background="#11151C">
+                    <shapes:Line StartPoint="0,180" EndPoint="760,180" Stroke="#596274" StrokeThickness="1"/>
+                    <shapes:Line StartPoint="0,0" EndPoint="0,180" Stroke="#596274" StrokeThickness="1"/>
+                    <shapes:Polyline Points="{Binding PressurePoints}" Stroke="#4DA6FF" StrokeThickness="2"/>
+                </Canvas>
+            </Border>
+        </Grid>
+    </Grid>
+
+</Window>
