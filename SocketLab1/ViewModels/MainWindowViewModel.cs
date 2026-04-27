@@ -247,6 +247,10 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             AddClientLog($"Ошибка запроса: {ex.Message}");
         }
+        finally
+        {
+            await DisconnectClientAsync();
+        }
     }
 
     [RelayCommand]
